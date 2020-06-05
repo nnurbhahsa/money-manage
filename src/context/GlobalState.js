@@ -3,12 +3,7 @@ import AppReducer from "./AppReducer";
 
 // initial state
 const initialState = {
-  transactions: [
-    { id: 1, text: "Flower", amount: -20 },
-    { id: 2, text: "Salary", amount: 300 },
-    { id: 3, text: "Book", amount: -10 },
-    { id: 4, text: "Camera", amount: 150 },
-  ],
+  transactions: [],
 };
 
 // create context
@@ -19,12 +14,31 @@ export const GlobalProvider = ({ children }) => {
   // use dispatch with reducer action
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
+  // ACTIONS that will make calls to reducer for GlobalState
+  function deleteTransaction(id) {
+    dispatch({
+      type: "DELETE_TRANSACTION",
+      // any data we want to send to it
+      payload: id,
+    });
+  }
+
+  function addTransaction(transaction) {
+    dispatch({
+      type: "ADD_TRANSACTION",
+      // any data we want to send to it
+      payload: transaction,
+    });
+  }
+
   return (
     <GlobalContext.Provider
       value={{
         // can access anything in initialState object by
         transactions: state.transactions,
         // can access transactions from any component requested from using useContext (another react hook)
+        deleteTransaction,
+        addTransaction,
       }}
     >
       {children}
